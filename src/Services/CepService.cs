@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Primitives;
 using Services;
 using Services.Wrappers;
 
@@ -17,7 +18,16 @@ public class CepService {
     {
         var dadosCep = _cepApiWrapper.ObterDados(cep);
         _arquivoHelper.SalvarDadosNoFormatoExperado(dadosCep);
-        return true;        
+        return true;
+    }
+
+    public DadosCep RetornarDadosCep(string cep) 
+    {
+        return _cepApiWrapper.ObterDados(cep);
+    }
+
+    public string RetornarDadosCepSalvos(){
+        return _arquivoHelper.RetornarDadosSalvos();
     }
 
     public bool ValidarCep(string  cep)

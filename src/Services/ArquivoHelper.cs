@@ -26,7 +26,7 @@ public class ArquivoHelper
         return deletouArquivo;
     }
 
-    public string SalvarDadosNoFormatoExperado(DadosCep dadosCep, string nomeDoArquivo = "dados_cep")
+    public string SalvarDadosNoFormatoExperado(DadosCep dadosCep, string nomeDoArquivo = "dados_cep.txt")
     {        
         var textoCep = $"Cep: {dadosCep.Cep} \r\n"
                      + $"Logradouro: {dadosCep.Logradouro} \r\n"
@@ -35,6 +35,7 @@ public class ArquivoHelper
                      + "----------";
 
         var arquivoJaExiste = VerificarSeArquivoExiste(nomeDoArquivo);
+        Console.WriteLine(arquivoJaExiste);
         return CriarEditarArquivo(nomeDoArquivo, textoCep, arquivoJaExiste);
     }
 
@@ -54,6 +55,10 @@ public class ArquivoHelper
             {
                 writer.WriteLine(conteudoDoArquivo);
                 return caminhoDoArquivo;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Erro ao salvar arquivo: {ex.Message}");
             }
             finally
             {
@@ -77,5 +82,16 @@ public class ArquivoHelper
             Directory.CreateDirectory(pastaNoServidor);
 
         return pastaNoServidor;
+    }
+
+    public string RetornarDadosSalvos(string nomeDoArquivo = "dados_cep.txt")
+    {
+
+        if(!VerificarSeArquivoExiste(nomeDoArquivo))
+            return string.Empty;
+
+        var caminhoDoArquivo = Path.Combine(_pastaNoServidor, nomeDoArquivo);
+
+        return File.ReadAllText(caminhoDoArquivo);
     }
 }
